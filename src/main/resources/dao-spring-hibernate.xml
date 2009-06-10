@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=
+		"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- Hibernate SessionFactory definition -->
+	<bean id="hibernateSessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingLocations">
+			<list>
+				<!-- MAPPINGS BEGIN -->
+				<value>classpath*:org/mandubian/**/*.hbm.xml</value>
+				<!-- MAPPINGS END -->
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">${datasource.hbm2ddl}</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
+				<!-- batch size is set to 0 for HSQLDB because HSQLDB doesn't log errors if they occur during batching -->
+				<prop key="hibernate.jdbc.batch_size">0</prop>
+				<prop key="hibernate.dialect">${datasource.dialect}</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- DataSource definition -->
+	<!-- the DataSource (parameterized for configuration via a PropertyPlaceHolderConfigurer) -->
+	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${datasource.driver}" />
+		<property name="url" value="${datasource.url}" />
+		<property name="username" value="${datasource.username}" />
+		<property name="password" value="${datasource.password}" />
+	</bean>
+
+	<bean id="hibernateTemplate"
+		class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+	</bean>
+	
+	<bean id="fooDao"
+		class="org.mandubian.sample.genericdao.FooDaoSpringHibernateTemplate">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+</beans>

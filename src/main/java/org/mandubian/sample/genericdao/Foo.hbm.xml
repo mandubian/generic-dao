@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ <hibernate-mapping package="org.mandubian.sample.genericdao">
+   <class name="Foo">
+     <id name="fooId" column="FOO_ID" >
+       <generator class="native" />
+     </id>
+     <version name="lastUpdated" type="timestamp" generated="always" insert="false">
+     	<column name="LAST_UPDATED" sql-type="timestamp" default="CURRENT_TIMESTAMP"/>
+     </version>
+
+     <property name="fooStr" column="FOO_STR"/>
+     <property name="fooEnum" column="FOO_ENUM" type="org.mandubian.sample.genericdao.FooEnumUserType"/>
+   </class>
+ </hibernate-mapping>

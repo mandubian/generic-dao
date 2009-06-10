@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.mandubian</groupId>
+	<artifactId>generic-dao</artifactId>
+	<name>Generic Dao</name>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>A generic Dao based on Java Generics and enabling the use of Java Enum with hibernate/spring integration and a sample</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate</artifactId>
+			<version>3.2.0.ga</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>2.5.6</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>genericdao</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*hbm.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>mysql</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<testResources>
+					<testResource>
+						<directory>${basedir}/src/test/resources</directory>
+						<includes>
+							<include>*.xml</include>
+						</includes>
+					</testResource>
+					<testResource>
+						<directory>${basedir}/src/test/resources/mysql</directory>
+						<includes>
+							<include>test-db.properties</include>
+						</includes>
+					</testResource>
+				</testResources>
+			</build>
+
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>5.1.5</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>postgres</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<build>
+				<testResources>
+					<testResource>
+						<directory>${basedir}/src/test/resources</directory>
+						<includes>
+							<include>*.xml</include>
+						</includes>
+					</testResource>
+					<testResource>
+						<directory>${basedir}/src/test/resources/postgres</directory>
+						<includes>
+							<include>test-db.properties</include>
+						</includes>
+					</testResource>
+				</testResources>
+			</build>
+
+			<dependencies>
+				<dependency>
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<version>8.1-407.jdbc3</version>
+				</dependency>
+			</dependencies>
+
+		</profile>
+	</profiles>
+
+</project>
